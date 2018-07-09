@@ -73,7 +73,16 @@ code {
     display: inline-block !important;
     opacity: 1;
     min-width: 400px;
+    width: 100%;
     padding: 10px !important;
+}
+
+.copy {
+    width: 5px;
+    height: 5px;
+    background: green;
+    float: right;
+    background: url('https://raw.github.com/Mat-Frayne/MySnippets/tree/master/static/images/link.png')
 }
 
 .dropbtn {
