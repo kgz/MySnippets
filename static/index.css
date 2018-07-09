@@ -71,7 +71,9 @@
 
 code {
     display: inline-block !important;
-    opacity: 0;
+    opacity: 1;
+    min-width: 400px;
+    padding: 10px !important;
 }
 
 .dropbtn {
