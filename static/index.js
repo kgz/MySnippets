@@ -25,41 +25,40 @@ function getRegexes(lang) {
 function escapeHtml(text) {
     return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
-
 function parse(out, lang) {
-    $("#mainContent").empty();;
-    
-    regexs = new getRegexes(lang)
-    var snippets = out.match(regexs["STARTEND"])
-    for (index in snippets) {
-        snip = snippets[index]
-        name = snip.match(regexs["NAME"])
-        
-        code = snip.match(regexs["CODE"]);
-        console.log(snip)
-        console.log(code)
-        input = snip.match(regexs["INPUT"]);
-        output = snip.match(regexs["OUTPUT"]);
-        source = snip.match(regexs["SOURCE"])
-        if (name != "null") $("#mainContent").append("<div class='blockTitle'>" + name.trim() + ":</div>")
-        if (code != "null") $("#mainContent").append(`Code: <div class='copy'>copy</div><pre><code class='` + lang + `'>` + escapeHtml(code.join("\n")) + `</code></pre>`)
-        if (input != "null") $("#mainContent").append(`Input:<div class='copy'>copy</div>\n<pre><code class='` + lang + `'>` + escapeHtml(input.join("\n")) + `</code></pre>`)
-        if (output != "null") $("#mainContent").append(`Output:\n<pre><code class='` + lang + `'>` + escapeHtml(output.join("\n")) + `</code></pre>`)
-    }
-    $('code').each(function (i, block) {
-        hljs.highlightBlock(block);
-        $(this).animate({
-            opacity: 1,
-        })
+    $("#mainContent").fadeOut(function () {
+        $("#mainContent").empty();
+
+        regexs = new getRegexes(lang)
+        var snippets = out.match(regexs["STARTEND"])
+        for (index in snippets) {
+            snip = snippets[index]
+            name = snip.match(regexs["NAME"])
+
+            code = snip.match(regexs["CODE"]);
+            console.log(snip)
+            console.log(code)
+            input = snip.match(regexs["INPUT"]);
+            output = snip.match(regexs["OUTPUT"]);
+            source = snip.match(regexs["SOURCE"])
+            container = $("<span/>", {
+                class: "container"
+            })
+            if (name != "null") container.append("<div class='blockTitle'>" + name.trim() + ":</div>")
+            if (code != "null") container.append(`Code: <div class='copy'>copy</div><pre><code class='` + lang + `'>` + escapeHtml(code.join("\n")) + `</code></pre>`)
+            if (input != "null") container.append(`Input:<div class='copy'>copy</div>\n<pre><code class='` + lang + `'>` + escapeHtml(input.join("\n")) + `</code></pre>`)
+            if (output != "null") container.append(`Output:\n<pre><code class='` + lang + `'>` + escapeHtml(output.join("\n")) + `</code></pre>`)
+            container.append("<hr>")
+            $("#mainContent").append(container)
+        }
+        $('code').each(function (i, block) {
+            hljs.highlightBlock(block);
+        });
     });
+    $("#mainContent").fadeIn();
 }
 
-$(document).on("click", ".langClick", function (){
-    that = this
-    $.get("https://raw.githubusercontent.com/Mat-Frayne/MySnippets/master/snippets/" + $(that).attr("data-link"), function (out) {
-        parse(out, $(that).attr("data-link").split(".")[0]);
-    })
-})
+
 
 $(function () {
     $.each(themes, function (_, theme) {
@@ -77,8 +76,12 @@ $(function () {
     })
 });
 
-
-
+$(document).on("click", ".langClick", function (){
+    that = this
+    $.get("https://raw.githubusercontent.com/Mat-Frayne/MySnippets/master/snippets/" + $(that).attr("data-link"), function (out) {
+        parse(out, $(that).attr("data-link").split(".")[0]);
+    })
+})
 $(document).on("click", ".dropdown button", function () {
     $(".dropdown-content").toggle()
     $(this).parent().css("height", ($(".dropdown-content").is(":visible") ? "100%" : "20px"))
@@ -98,6 +101,7 @@ $(document).on("click", ".dropdown-content a", function () {
                 $(that).css("background-color", "#383838");
             }))
         })
+        
     });
 });
 $(document).on("click", ".copy", function () {
