@@ -101,7 +101,7 @@ $(function () {
     console.log(theme)
     if (theme) {
         arr = $(".dropdown a");
-        arr.each(() => {
+        arr.each(function(ind) {
             console.log($(this).text() + " " + theme)
             if ($(this).text() == theme) {
                 $(this).click()
