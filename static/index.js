@@ -100,7 +100,7 @@ $(function () {
     theme = getCookie("theme")
     console.log(theme)
     if (theme) {
-        arr = $(".dropdown a");
+        arr = $(".dropdown-content a");
         arr.each(function(ind) {
             console.log($(this).text() + " " + theme)
             if ($(this).text() == theme) {
