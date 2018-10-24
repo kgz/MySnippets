@@ -7,7 +7,28 @@ comments = {
     "javascript": "//"
 }
 
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    var expires = "expires=" + d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
 
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
 
 function getRegexes(lang) {
     comment = comments[lang];
@@ -25,6 +46,7 @@ function getRegexes(lang) {
 function escapeHtml(text) {
     return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
+
 function parse(out, lang) {
     $("#mainContent").fadeOut(function () {
         $("#mainContent").empty();
@@ -34,20 +56,17 @@ function parse(out, lang) {
         for (index in snippets) {
             snip = snippets[index]
             name = snip.match(regexs["NAME"])
-
             code = snip.match(regexs["CODE"]);
-            console.log(snip)
-            console.log(code)
             input = snip.match(regexs["INPUT"]);
             output = snip.match(regexs["OUTPUT"]);
             source = snip.match(regexs["SOURCE"])
             container = $("<span/>", {
                 class: "container"
             })
-            if (name != "null") container.append("<div class='blockTitle'>" + name.trim() + ":</div>")
-            if (code != "null") container.append(`Code: <div class='copy'>copy</div><pre><code class='` + lang + `'>` + escapeHtml(code.join("\n")) + `</code></pre>`)
-            if (input != "null") container.append(`Input:<div class='copy'>copy</div>\n<pre><code class='` + lang + `'>` + escapeHtml(input.join("\n")) + `</code></pre>`)
-            if (output != "null") container.append(`Output:\n<pre><code class='` + lang + `'>` + escapeHtml(output.join("\n")) + `</code></pre>`)
+            if (name) container.append("<div class='blockTitle'>" + name.trim() + ":</div>")
+            if (code) container.append(`Code: <div class='copy'>copy</div><pre><code class='` + lang + `'>` + escapeHtml(code.join("\n")) + `</code></pre>`)
+            if (input) container.append(`Input:<div class='copy'>copy</div>\n<pre><code class='` + lang + `'>` + escapeHtml(input.join("\n")) + `</code></pre>`)
+            if (output) container.append(`Output:\n<pre><code class='` + lang + `'>` + escapeHtml(output.join("\n")) + `</code></pre>`)
             container.append("<hr>")
             $("#mainContent").append(container)
         }
@@ -67,16 +86,31 @@ $(function () {
     $.get("https://api.github.com/repos/Mat-Frayne/MySnippets/contents/snippets", function (data) {
         for (x in data) {
             df = data[x].name.match(/(.*)(?=\.)/)[0]
-            $("#contents").append($("<div/>", { class: "langClick", text: df, "data-link": data[x].name }))
-            
+            $("#contents").append($("<div/>", {
+                class: "langClick",
+                text: df,
+                "data-link": data[x].name
+            }))
+
         }
         $.get(data[0].download_url, function (out) {
             parse(out, data[0].name.match(/(.*)(?=\.)/)[0]);
         })
     })
+    theme = getCookie("theme")
+    console.log(theme)
+    if (theme) {
+        arr = $(".dropdown a");
+        arr.forEach(element => {
+            console.log(element)
+            if ($(element).text() == theme) {
+                $(element).click()
+            }
+        });
+    }
 });
 
-$(document).on("click", ".langClick", function (){
+$(document).on("click", ".langClick", function () {
     that = this
     $.get("https://raw.githubusercontent.com/Mat-Frayne/MySnippets/master/snippets/" + $(that).attr("data-link"), function (out) {
         parse(out, $(that).attr("data-link").split(".")[0]);
@@ -99,17 +133,20 @@ $(document).on("click", ".dropdown-content a", function () {
                 $(".dropdown-content a").css("color", "black")
                 $(that).css("color", "white")
                 $(that).css("background-color", "#383838");
+                setCookie("theme", $(that).text(), 365)
             }))
         })
-        
+
     });
 });
 $(document).on("click", ".copy", function () {
     that = $(this).next("pre").find("code").select();
-    temp = $("<textarea/>", { style: "display:none;", text: that.text() }).appendTo("body")
+    temp = $("<textarea/>", {
+        style: "display:none;",
+        text: that.text()
+    }).appendTo("body")
     temp.select()
     document.execCommand("copy");
     console.log("copied")
     temp.remove();
 });
-
