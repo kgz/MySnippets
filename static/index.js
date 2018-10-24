@@ -27,18 +27,18 @@ function escapeHtml(text) {
 }
 
 function parse(out, lang) {
-    $("#mainContent *").remove();
+    $("#mainContent").empty();;
+    
     regexs = new getRegexes(lang)
-    console.log(lang)
-    console.log(regexs)
     var snippets = out.match(regexs["STARTEND"])
     for (index in snippets) {
         snip = snippets[index]
         name = snip.match(regexs["NAME"])
-
+        
         code = snip.match(regexs["CODE"]);
+        console.log(snip)
+        console.log(code)
         input = snip.match(regexs["INPUT"]);
-        console.log(input)
         output = snip.match(regexs["OUTPUT"]);
         source = snip.match(regexs["SOURCE"])
         if (name != "null") $("#mainContent").append("<div class='blockTitle'>" + name.trim() + ":</div>")
@@ -69,11 +69,11 @@ $(function () {
         for (x in data) {
             df = data[x].name.match(/(.*)(?=\.)/)[0]
             $("#contents").append($("<div/>", { class: "langClick", text: df, "data-link": data[x].name }))
-            $.get(data[x].download_url, function (out) {
-                parse(out, df);
-            })
+            
         }
-       
+        $.get(data[0].download_url, function (out) {
+            parse(out, data[0].name.match(/(.*)(?=\.)/)[0]);
+        })
     })
 });
 
