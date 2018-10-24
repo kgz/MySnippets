@@ -6,9 +6,3 @@ function escapeHtml(text) {
 //&&INPUT&& console.log(escapeHtml("<div id='test'></div>"));
 //&&OUTPUT&& "&lt;div id=&#039;test&#039;&gt;&lt;/div&gt;"
 //&&END&&
-//
-//&&START&&
-//&&NAME&&
-//&&INPUT&&
-//&&OUTPUT&&
-//&&END&&

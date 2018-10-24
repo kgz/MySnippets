@@ -3,7 +3,7 @@ cart = {
     "items": {}
 }
 comments = {
-    "python": "#",
+    "python": "# ",
     "javascript": "//"
 }
 
@@ -12,13 +12,13 @@ comments = {
 function getRegexes(lang) {
     comment = comments[lang];
     return {
-        "STARTEND": new RegExp("(?<=[" + comment + "\/\/]\\s&&START&&\\s)(.|\\n|\\r)*?([" + comment + "\/\/]\\s&&END&&)", "g"),
-        "NAME": new RegExp("(?<=[" + comment + "\/\/]\\s&&NAME&&\\s)(.|\\n|\\r)*?(?=\\n)", "g"),
-        "INPUT": new RegExp("(?<=\\s&&INPUT&&\\s)([\\s\\S]*?)(?=\\n" + comment + ")", "gm"),
-        "OUTPUT": new RegExp("(?<=\\s&&OUTPUT&&\\s)([\\s\\S]*?)(?=\\n" + comment + ")", "gm"),
+        "STARTEND": new RegExp("(?<=[" + comment + "\/\/]\\s?&&START&&\\s)(.|\\n|\\r)*?([" + comment + "\/\/]\\s?&&END&&)", "g"),
+        "NAME": new RegExp("(?<=[" + comment + "\/\/]\\s?&&NAME&&\\s)(.|\\n|\\r)*?(?=\\n)", "g"),
+        "INPUT": new RegExp("(?<=\\s?&&INPUT&&\\s)([\\s\\S]*?)(?=\\n" + comment + ")", "gm"),
+        "OUTPUT": new RegExp("(?<=\\s?&&OUTPUT&&\\s)([\\s\\S]*?)(?=\\n" + comment + ")", "gm"),
         "CODE": new RegExp("^(?![" + comment + "\/\/]).+", "gm"),
-        "CREDIT": new RegExp("(?<=&&CREDIT&&\\s)(.*)", "g"),
-        "tags": new RegExp("(?<=&&TAGS&&\\s)(.*)", "g")
+        "CREDIT": new RegExp("(?<=\\s?&&CREDIT&&\\s)(.*)", "g"),
+        "tags": new RegExp("(?<=\\s?&&TAGS&&\\s)(.*)", "g")
     }
 }
 
@@ -29,14 +29,16 @@ function escapeHtml(text) {
 function parse(out, lang) {
     $("#mainContent *").remove();
     regexs = new getRegexes(lang)
+    console.log(lang)
     console.log(regexs)
-
     var snippets = out.match(regexs["STARTEND"])
     for (index in snippets) {
         snip = snippets[index]
         name = snip.match(regexs["NAME"])
+
         code = snip.match(regexs["CODE"]);
         input = snip.match(regexs["INPUT"]);
+        console.log(input)
         output = snip.match(regexs["OUTPUT"]);
         source = snip.match(regexs["SOURCE"])
         if (name != "null") $("#mainContent").append("<div class='blockTitle'>" + name.trim() + ":</div>")
