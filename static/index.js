@@ -101,10 +101,10 @@ $(function () {
     console.log(theme)
     if (theme) {
         arr = $(".dropdown a");
-        arr.forEach(element => {
-            console.log(element)
-            if ($(element).text() == theme) {
-                $(element).click()
+        arr.each(() => {
+            console.log($(this))
+            if ($(this).text() == theme) {
+                $(this).click()
             }
         });
     }
