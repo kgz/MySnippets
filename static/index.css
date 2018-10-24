@@ -22,18 +22,19 @@
     float: left;
     margin-left: 10%;
     min-width: 500px;
+    font-size: 19px;
 }
 
 #contents .conTitle {
-    font-size: 25px;
+    font-size: 27px;
     font-weight: 300;
     text-align: center;
     border-bottom: 3px solid black;
-    padding-bottom: 5px;
+    padding-bottom: 10px;
 }
 
 .blockTitle {
-    font-size: 25px;
+    font-size: 27px;
     font-weight: 300;
     margin-top: 20px;
     text-transform: capitalize;
@@ -75,14 +76,17 @@ code {
     min-width: 400px;
     width: 100%;
     padding: 10px !important;
+    font-size: 16px;
 }
 
 .copy {
-    width: 5px;
-    height: 5px;
-    background: green;
+    width: 20px;
+    height: 20px;
     float: right;
-    background: url('https://raw.github.com/Mat-Frayne/MySnippets/tree/master/static/images/link.png')
+    /* background-image: url('https://raw.githubusercontent.com/Mat-Frayne/MySnippets/static/images/link.png'); */
+    background-position: center;
+    background-size: 100% auto;
+    background-repeat: no-repeat;
 }
 
 .dropbtn {
