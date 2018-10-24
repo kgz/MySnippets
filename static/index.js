@@ -16,7 +16,7 @@ function getRegexes(lang) {
         "NAME": new RegExp("(?<=[" + comment + "\/\/]\\s?&&NAME&&\\s)(.|\\n|\\r)*?(?=\\n)", "g"),
         "INPUT": new RegExp("(?<=\\s?&&INPUT&&\\s)([\\s\\S]*?)(?=\\n" + comment + ")", "gm"),
         "OUTPUT": new RegExp("(?<=\\s?&&OUTPUT&&\\s)([\\s\\S]*?)(?=\\n" + comment + ")", "gm"),
-        "CODE": new RegExp("^(?![" + comment + "\/\/]).+", "gm"),
+        "CODE": new RegExp("^(?!" + comment + ").+", "gm"),
         "CREDIT": new RegExp("(?<=\\s?&&CREDIT&&\\s)(.*)", "g"),
         "tags": new RegExp("(?<=\\s?&&TAGS&&\\s)(.*)", "g")
     }
