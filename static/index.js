@@ -64,7 +64,7 @@ function parse(out, lang) {
                 class: "container"
             })
             if (name) container.append("<div class='blockTitle'>" + name.trim() + ":</div>")
-            if (code) container.append(`Code: <div class='copy'>copy</div><pre><code class='` + lang + `'>` + escapeHtml(code.join("\n")) + `</code></pre>`)
+            if (code) container.append(`<div class='copy'>copy</div><pre><code class='` + lang + `'>` + escapeHtml(code.join("\n")) + `</code></pre>`)
             if (input) container.append(`Input:<div class='copy'>copy</div>\n<pre><code class='` + lang + `'>` + escapeHtml(input.join("\n")) + `</code></pre>`)
             if (output) container.append(`Output:\n<pre><code class='` + lang + `'>` + escapeHtml(output.join("\n")) + `</code></pre>`)
             container.append("<hr>")
@@ -102,7 +102,7 @@ $(function () {
     if (theme) {
         arr = $(".dropdown a");
         arr.each(() => {
-            console.log($(this))
+            console.log($(this).text() + " " + theme)
             if ($(this).text() == theme) {
                 $(this).click()
             }
