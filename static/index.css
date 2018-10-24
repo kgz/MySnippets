@@ -20,7 +20,7 @@
     position: relative;
     top: 10px;
     float: left;
-    margin-left: 10%;
+    left: 5%;
     min-width: 500px;
     font-size: 19px;
 }
@@ -105,6 +105,8 @@ code {
     top: 0px;
     display: inline-block;
     height: 20px;
+    z-index: 9999;
+
 }
 
 
