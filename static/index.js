@@ -180,9 +180,9 @@ $(document).on("click", ".copy", function () {
 $(document).on("scroll", function () {
     console.log($([document.documentElement, document.body]).scrollTop() > 20)
     if ($([document.documentElement, document.body]).scrollTop() > 20) {
-        $("#scrollup").fadeIn();
+        $("#scrollup1").fadeIn();
     } else {
-        $("#scrollup").fadeOut();
+        $("#scrollup1").fadeOut();
     }
 });
 
