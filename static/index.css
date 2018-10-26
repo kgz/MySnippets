@@ -26,7 +26,17 @@
     display: none;
 }
 
+.sidenav{
+    /* display: none; */
+    text-align:right;
+    color: rgb(214, 119, 11);
+    cursor: pointer;
+}
+.sidenav a{
+    text-decoration: none;
+    color: rgb(214, 119, 11) !important;
 
+}
 #contents .conTitle {
     font-size: 27px;
     font-weight: 300;
@@ -38,8 +48,8 @@
 .blockTitle {
     font-size: 27px;
     font-weight: 300;
-    margin-top: 20px;
     text-transform: capitalize;
+    float:left
 }
 
 .source {
@@ -57,7 +67,7 @@
     color: rgb(58, 56, 56);
     font-weight: 900;
     text-decoration: none;
-    font-size: 20px;
+    font-size: 25px;
     width: 100%;
     text-align: right;
     cursor: pointer;
@@ -163,4 +173,12 @@ code {
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
+}
+
+#scrollup{
+    position:fixed;
+    bottom:20px;
+    left:20px;
+    cursor: pointer;
+    display: none;
 }

@@ -48,12 +48,26 @@ function escapeHtml(text) {
 }
 
 function parse(out, lang) {
+    if($(".sidenav")){
+        $(".sidenav").fadeOut();
+        $(".sidenav").remove();
+
+    }
     $("#mainContent").fadeOut(function () {
         $("#mainContent").empty();
-
         regexs = new getRegexes(lang)
+        var side = null;
+
+        $(".langClick").each(function(i){
+            if($(this).text().toLowerCase() == lang.toLowerCase())side = $(this);
+        })
+        lstt = $("<div/>", {class:"sidenav"})
+        if(side) lstt.insertAfter(side);
+
         var snippets = out.match(regexs["STARTEND"])
+
         for (index in snippets) {
+
             snip = snippets[index]
             name = snip.match(regexs["NAME"])
             code = snip.match(regexs["CODE"]);
@@ -63,17 +77,21 @@ function parse(out, lang) {
             container = $("<span/>", {
                 class: "container"
             })
-            if (name) container.append("<div class='blockTitle'>" + name.trim() + ":</div>")
-            if (code) container.append(`<div class='copy'>copy</div><pre><code class='` + lang + `'>` + escapeHtml(code.join("\n")) + `</code></pre>`)
+            if(name) lstt.append("<a href='#id"+index+"' data-id='"+ index+"'>" + name.trim() + "<a/><br>")
+            if (name) container.append("<div class='blockTitle' id='id"+index+"'>" + name.trim() + ":</div>")
+            if (code) container.append(`<div class='copy'>copy</div><br style='clear:both'><pre><code class='` + lang + `'>` + escapeHtml(code.join("\n")) + `</code></pre>`)
             if (input) container.append(`Input:<div class='copy'>copy</div>\n<pre><code class='` + lang + `'>` + escapeHtml(input.join("\n")) + `</code></pre>`)
             if (output) container.append(`Output:\n<pre><code class='` + lang + `'>` + escapeHtml(output.join("\n")) + `</code></pre>`)
             container.append("<hr>")
             $("#mainContent").append(container)
+           
+            
         }
         $('code').each(function (i, block) {
             hljs.highlightBlock(block);
         });
     });
+    $(".sidenav").fadeIn();
     $("#mainContent").fadeIn();
 }
 
@@ -83,6 +101,17 @@ $(function () {
     $.each(themes, function (_, theme) {
         $(".dropdown-content").append("<a href='#'>" + theme + "</a>")
     })
+    theme = getCookie("theme")
+    console.log(theme)
+    if (theme) {
+        arr = $(".dropdown-content a");
+        arr.each(function(ind) {
+            console.log($(this).text() + " " + theme)
+            if ($(this).text() == theme) {
+                $(this).click()
+            }
+        });
+    }
     $.get("https://api.github.com/repos/Mat-Frayne/MySnippets/contents/snippets", function (data) {
         for (x in data) {
             df = data[x].name.match(/(.*)(?=\.)/)[0]
@@ -97,17 +126,7 @@ $(function () {
             parse(out, data[0].name.match(/(.*)(?=\.)/)[0]);
         })
     })
-    theme = getCookie("theme")
-    console.log(theme)
-    if (theme) {
-        arr = $(".dropdown-content a");
-        arr.each(function(ind) {
-            console.log($(this).text() + " " + theme)
-            if ($(this).text() == theme) {
-                $(this).click()
-            }
-        });
-    }
+    
 });
 
 $(document).on("click", ".langClick", function () {
@@ -116,6 +135,12 @@ $(document).on("click", ".langClick", function () {
         parse(out, $(that).attr("data-link").split(".")[0]);
     })
 })
+// $(document).on("click", ".sidenav a", function () {
+//     that = $(this)
+//     $([document.documentElement, document.body]).animate({
+//         scrollTop: $(".container").eq(that.attr("data-id")).offset().top - 30
+//     }, 200);
+// });
 $(document).on("click", ".dropdown button", function () {
     $(".dropdown-content").toggle()
     $(this).parent().css("height", ($(".dropdown-content").is(":visible") ? "100%" : "20px"))
@@ -150,3 +175,19 @@ $(document).on("click", ".copy", function () {
     console.log("copied")
     temp.remove();
 });
+
+
+$(document).on("scroll", function () {
+    console.log($([document.documentElement, document.body]).scrollTop() > 20)
+    if ($([document.documentElement, document.body]).scrollTop() > 20) {
+        $("#scrollup").fadeIn();
+    } else {
+        $("#scrollup").fadeOut();
+    }
+});
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+}
