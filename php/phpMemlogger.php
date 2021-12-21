@@ -1,3 +1,6 @@
+//set ini_set("auto_detect_line_endings", true);
+//inlude_once("https://raw.githubusercontent.com/kgz/MySnippets/master/php/phpMemlogger.php");
+
 abstract class memLog{
 	private static $last = 0;
 	public static $fn =  "_memory_usage.txt";
